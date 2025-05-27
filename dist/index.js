@@ -140,12 +140,19 @@ var useRemixForm = ({
   const data = (_b = fetcher == null ? void 0 : fetcher.data) != null ? _b : actionData;
   const methods = useForm({ ...formProps, errors: data == null ? void 0 : data.errors });
   const navigation = useNavigation();
-  const isSubmittingForm = useMemo(
-    () => Boolean(
-      navigation.state !== "idle" && navigation.formData !== void 0 || (fetcher == null ? void 0 : fetcher.state) !== "idle" && (fetcher == null ? void 0 : fetcher.formData) !== void 0
-    ),
-    [navigation.state, navigation.formData, fetcher == null ? void 0 : fetcher.state, fetcher == null ? void 0 : fetcher.formData]
-  );
+  const isSubmittingForm = useMemo(() => {
+    var _a2, _b2;
+    const navigationIsSubmitting = navigation.state !== "idle" && ((_a2 = navigation.formData) != null ? _a2 : navigation.json) !== void 0;
+    const fetcherIsSubmitting = (fetcher == null ? void 0 : fetcher.state) !== "idle" && ((_b2 = fetcher == null ? void 0 : fetcher.formData) != null ? _b2 : fetcher == null ? void 0 : fetcher.json) !== void 0;
+    return navigationIsSubmitting || fetcherIsSubmitting;
+  }, [
+    navigation.state,
+    navigation.formData,
+    navigation.json,
+    fetcher == null ? void 0 : fetcher.state,
+    fetcher == null ? void 0 : fetcher.formData,
+    fetcher == null ? void 0 : fetcher.json
+  ]);
   const [isSubmittingNetwork, setIsSubmittingNetwork] = useState(false);
   useEffect(() => {
     if (!isSubmittingForm) {
